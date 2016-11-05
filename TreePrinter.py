@@ -18,6 +18,17 @@ class TreePrinter:
 
     @addToClass(AST.Program)
     def printTree(self, indent=0):
+        return "" if self.elements is None else self.elements.printTree(indent)
+
+    @addToClass(AST.Elements)
+    def printTree(self, indent=0):
+        res = ""
+        for element in self.list:
+            res += "" if element is None else element.printTree(indent)
+        return res
+
+    @addToClass(AST.Element)
+    def printTree(self, indent=0):
         return ("" if self.dec is None else self.dec.printTree(indent)) + \
         ("" if self.func is None else self.func.printTree(indent)) + \
         ("" if self.inst is None else self.inst.printTree(indent))
@@ -26,7 +37,7 @@ class TreePrinter:
     def printTree(self, indent=0):
         res = "| " * indent + "DECL\n"
         for dec in self.list:
-            res += dec.printTree(indent+1)
+            res += "" if dec is None else dec.printTree(indent+1)
         return res
 
     @addToClass(AST.Declaration)
@@ -37,7 +48,7 @@ class TreePrinter:
     def printTree(self, indent=0):
         res = ""
         for init in self.list:
-            res += init.printTree(indent)
+            res += "" if init is None else init.printTree(indent)
         return res
 
     @addToClass(AST.Init)

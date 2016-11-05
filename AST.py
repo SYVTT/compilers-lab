@@ -6,6 +6,19 @@ class Node(object):
 
 
 class Program(Node):
+    def __init__(self, elements):
+        self.elements = elements
+
+
+class Elements(Node):
+    def __init__(self):
+        self.list = []
+
+    def add(self, dec):
+        self.list.append(dec)
+
+
+class Element(Node):
     def __init__(self, dec, func, inst):
         self.dec = dec
         self.func = func

@@ -37,12 +37,27 @@ class Cparser(object):
         else:
             print("Unexpected end of input")
 
-    
+
     def p_program(self, p):
-        """program : declarations fundefs_opt instructions_opt"""
-        program = AST.Program(None if len(p[1].list) == 0 else p[1], None if len(p[2].list) == 0 else p[2], p[3])
+        """program : elements"""
+        program = AST.Program(None if len(p[1].list) == 0 else p[1])
         print program
 
+
+    def p_elements(self, p):
+        """elements : elements element
+                    | """
+        if len(p) == 1:
+            p[0] = AST.Elements()
+        else:
+            p[0] = AST.Elements() if p[1] is None else p[1]
+            p[0].add(p[2])
+
+
+    def p_element(self, p):
+        """element : declarations fundefs_opt instructions_opt"""
+        p[0] = AST.Element(None if len(p[1].list) == 0 else p[1], None if len(p[2].list) == 0 else p[2],
+                           None if len(p[3].list) == 0 else p[3])
 
 
     def p_declarations(self, p):
@@ -241,7 +256,10 @@ class Cparser(object):
     def p_fundefs_opt(self, p):
         """fundefs_opt : fundefs
                        | """
-        p[0] = p[1]
+        if len(p) == 2:
+            p[0] = p[1]
+        else:
+            p[0] = AST.FunDefs()
 
     def p_fundefs(self, p):
         """fundefs : fundefs fundef
